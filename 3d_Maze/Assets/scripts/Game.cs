@@ -18,4 +18,9 @@ public class Game : MonoBehaviour
         maze = new Maze(mazeSize);
         visualization.Visualize(maze);
     }
+
+    void OnDestroy()
+    {
+        maze.Dispose();
+    }
 }

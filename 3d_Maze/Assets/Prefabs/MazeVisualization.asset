@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e763e54bdcb2024479034fbfd1529cd2, type: 3}
   m_Name: MazeVisualization
   m_EditorClassIdentifier: 
-  end: {fileID: 1702615259678053122, guid: 09537f1e868e0274bb9139418be3af37, type: 3}
+  deadEnd: {fileID: 1702615259678053122, guid: 09537f1e868e0274bb9139418be3af37, type: 3}
   straight: {fileID: 1702615259678053122, guid: 7a3944f2c14489a4ea05dba0ec5463fb, type: 3}
   corner: {fileID: 1702615259678053122, guid: 6fdc7ea7c3ee17b47a27252bf2303bd2, type: 3}
   tJunction: {fileID: 1702615259678053122, guid: dd466f0c0240626419ce893421336895, type: 3}
