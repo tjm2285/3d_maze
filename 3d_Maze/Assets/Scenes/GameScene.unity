@@ -308,6 +308,7 @@ MonoBehaviour:
   mazeSize:
     x: 20
     y: 20
+  seed: 123
 --- !u!1 &1824539678
 GameObject:
   m_ObjectHideFlags: 0
