@@ -17,3 +17,4 @@ public enum MazeFlags
 
     PassagesDiagonal = 0b1111_0000
 }
+

@@ -12,7 +12,7 @@ public class MazeVisualization : ScriptableObject
     };
 
     [SerializeField]
-    MazeCellObject deadEnd, straight, corner, tJunction, xJunction;
+    MazeCellObject deadEnd, straight, cornerClosed, cornerOpen, tJunctionClosed, xJunctionClosed;
 
     public void Visualize(Maze maze)
     {
@@ -36,16 +36,20 @@ public class MazeVisualization : ScriptableObject
         MazeFlags.PassageN | MazeFlags.PassageS => (straight, 0),
         MazeFlags.PassageE | MazeFlags.PassageW => (straight, 1),
 
-        MazeFlags.PassageN | MazeFlags.PassageE => (corner, 0),
-        MazeFlags.PassageE | MazeFlags.PassageS => (corner, 1),
-        MazeFlags.PassageS | MazeFlags.PassageW => (corner, 2),
-        MazeFlags.PassageW | MazeFlags.PassageN => (corner, 3),
+        MazeFlags.PassageN | MazeFlags.PassageE => GetCorner(flags, 0),
+        MazeFlags.PassageE | MazeFlags.PassageS => GetCorner(flags, 1),
+        MazeFlags.PassageS | MazeFlags.PassageW => GetCorner(flags, 2),
+        MazeFlags.PassageW | MazeFlags.PassageN => GetCorner(flags, 3),
 
-        MazeFlags.PassagesStraight & ~MazeFlags.PassageW => (tJunction, 0),
-        MazeFlags.PassagesStraight & ~MazeFlags.PassageN => (tJunction, 1),
-        MazeFlags.PassagesStraight & ~MazeFlags.PassageE => (tJunction, 2),
-        MazeFlags.PassagesStraight & ~MazeFlags.PassageS => (tJunction, 3),
+        MazeFlags.PassagesStraight & ~MazeFlags.PassageW => (tJunctionClosed, 0),
+        MazeFlags.PassagesStraight & ~MazeFlags.PassageN => (tJunctionClosed, 1),
+        MazeFlags.PassagesStraight & ~MazeFlags.PassageE => (tJunctionClosed, 2),
+        MazeFlags.PassagesStraight & ~MazeFlags.PassageS => (tJunctionClosed, 3),
 
-        _ => (xJunction, 0)
+        _ => (xJunctionClosed, 0)
     };
+
+    (MazeCellObject, int) GetCorner(MazeFlags flags, int rotation) => (
+        flags.HasAny(MazeFlags.PassagesDiagonal) ? cornerOpen : cornerClosed, rotation
+    );
 }
