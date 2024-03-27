@@ -1389,7 +1389,7 @@ GameObject:
   - component: {fileID: 8457587459508911764}
   - component: {fileID: 1702615259678053122}
   m_Layer: 0
-  m_Name: Open
+  m_Name: X Junction Closed
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

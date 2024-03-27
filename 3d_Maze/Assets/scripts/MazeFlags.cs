@@ -8,5 +8,13 @@ public enum MazeFlags
     PassageS = 0b0100,
     PassageW = 0b1000,
 
-    PassageAll = 0b1111
+    PassagesStraight = 0b1111,
+
+    PassageNE = 0b0001_0000,
+    PassageSE = 0b0010_0000,
+    PassageSW = 0b0100_0000,
+    PassageNW = 0b1000_0000,
+
+    PassagesDiagonal = 0b1111_0000
 }
+
