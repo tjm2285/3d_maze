@@ -20,18 +20,31 @@ public class Game : MonoBehaviour
     [SerializeField, Range(0f, 1f)]
     float pickLastProbability = 0.5f;
 
+    [SerializeField, Range(0f, 1f)]
+    float openDeadEndProbability = 0.5f;
+
+    [SerializeField, Range(0f, 1f)]
+    float openArbitraryProbability = 0.5f;
+
     Maze maze;
 
     private void Awake()
     {
         maze = new Maze(mazeSize);
 
-        new GenerateMazeJob
+    new FindDiagonalPassagesJob
+    {
+        maze = maze
+    }.ScheduleParallel(
+        maze.Length, maze.SizeEW, new GenerateMazeJob
         {
             maze = maze,
             seed = seed != 0 ? seed : Random.Range(1, int.MaxValue),
-            pickLastProbability = pickLastProbability
-        }.Schedule().Complete();
+            pickLastProbability = pickLastProbability,
+            openDeadEndProbability = openDeadEndProbability,
+            openArbitraryProbability = openArbitraryProbability
+        }.Schedule()
+    ).Complete();
 
         visualization.Visualize(maze);
     }

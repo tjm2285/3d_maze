@@ -309,6 +309,9 @@ MonoBehaviour:
     x: 20
     y: 20
   seed: 123
+  pickLastProbability: 0.5
+  openDeadEndProbability: 0.5
+  openArbitraryProbability: 0.25
 --- !u!1 &1824539678
 GameObject:
   m_ObjectHideFlags: 0

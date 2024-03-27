@@ -26,7 +26,7 @@ public class MazeVisualization : ScriptableObject
         }
     }
 
-    (MazeCellObject, int) GetPrefab(MazeFlags flags) => flags switch
+    (MazeCellObject, int) GetPrefab(MazeFlags flags) => flags.StraightPassages() switch
     {
         MazeFlags.PassageN => (deadEnd, 0),
         MazeFlags.PassageE => (deadEnd, 1),
@@ -41,10 +41,10 @@ public class MazeVisualization : ScriptableObject
         MazeFlags.PassageS | MazeFlags.PassageW => (corner, 2),
         MazeFlags.PassageW | MazeFlags.PassageN => (corner, 3),
 
-        MazeFlags.PassageAll & ~MazeFlags.PassageW => (tJunction, 0),
-        MazeFlags.PassageAll & ~MazeFlags.PassageN => (tJunction, 1),
-        MazeFlags.PassageAll & ~MazeFlags.PassageE => (tJunction, 2),
-        MazeFlags.PassageAll & ~MazeFlags.PassageS => (tJunction, 3),
+        MazeFlags.PassagesStraight & ~MazeFlags.PassageW => (tJunction, 0),
+        MazeFlags.PassagesStraight & ~MazeFlags.PassageN => (tJunction, 1),
+        MazeFlags.PassagesStraight & ~MazeFlags.PassageE => (tJunction, 2),
+        MazeFlags.PassagesStraight & ~MazeFlags.PassageS => (tJunction, 3),
 
         _ => (xJunction, 0)
     };
