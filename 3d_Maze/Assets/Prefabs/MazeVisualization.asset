@@ -14,6 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   deadEnd: {fileID: 1702615259678053122, guid: 09537f1e868e0274bb9139418be3af37, type: 3}
   straight: {fileID: 1702615259678053122, guid: 7a3944f2c14489a4ea05dba0ec5463fb, type: 3}
-  corner: {fileID: 1702615259678053122, guid: 6fdc7ea7c3ee17b47a27252bf2303bd2, type: 3}
-  tJunction: {fileID: 1702615259678053122, guid: dd466f0c0240626419ce893421336895, type: 3}
-  xJunction: {fileID: 1702615259678053122, guid: 5a6091c7b28da5e44a18ec3cf348a03c, type: 3}
+  cornerClosed: {fileID: 1702615259678053122, guid: 6fdc7ea7c3ee17b47a27252bf2303bd2, type: 3}
+  cornerOpen: {fileID: 1702615259678053122, guid: 5559bf0e1f5ae5843bfc7cd044a5ceb3, type: 3}
+  tJunctionClosed: {fileID: 1702615259678053122, guid: dd466f0c0240626419ce893421336895, type: 3}
+  tJunctionOpenNE: {fileID: 1702615259678053122, guid: dcbdce48f71356045831ae640442ac3c, type: 3}
+  tJunctionOpenSE: {fileID: 1702615259678053122, guid: ea961ca93c985234197e10fd6f3a7bd7, type: 3}
+  tJunctionOpen: {fileID: 1702615259678053122, guid: a5911c826ffc38546b57211d63250566, type: 3}
+  xJunctionClosed: {fileID: 1702615259678053122, guid: 5a6091c7b28da5e44a18ec3cf348a03c, type: 3}
+  xJunctionOpenNE: {fileID: 1702615259678053122, guid: 549e17df7af28b649a3e0ba09a1dbcf8, type: 3}
+  xJunctionOpenNE_SE: {fileID: 1702615259678053122, guid: d1bb1195887ab434bb4bc63cfe71122c, type: 3}
+  xJunctionOpenNE_SW: {fileID: 1702615259678053122, guid: c5e10de0e0fd8934d93e172a021fc3c8, type: 3}
+  xJunctionClosedNE: {fileID: 1702615259678053122, guid: f903743ed0b99ed4dabc49d6ea1c2c64, type: 3}
+  xJunctionOpen: {fileID: 1702615259678053122, guid: 76a201184235b5f418610b9fc9467cbd, type: 3}

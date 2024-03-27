@@ -12,7 +12,8 @@ public class MazeVisualization : ScriptableObject
     };
 
     [SerializeField]
-    MazeCellObject deadEnd, straight, cornerClosed, cornerOpen, tJunctionClosed, xJunctionClosed;
+    MazeCellObject deadEnd, straight, cornerClosed, cornerOpen, tJunctionClosed, tJunctionOpenNE, tJunctionOpenSE, tJunctionOpen, xJunctionClosed, xJunctionOpenNE, xJunctionOpenNE_SE, xJunctionOpenNE_SW,
+        xJunctionClosedNE, xJunctionOpen;
 
     public void Visualize(Maze maze)
     {
@@ -41,15 +42,52 @@ public class MazeVisualization : ScriptableObject
         MazeFlags.PassageS | MazeFlags.PassageW => GetCorner(flags, 2),
         MazeFlags.PassageW | MazeFlags.PassageN => GetCorner(flags, 3),
 
-        MazeFlags.PassagesStraight & ~MazeFlags.PassageW => (tJunctionClosed, 0),
-        MazeFlags.PassagesStraight & ~MazeFlags.PassageN => (tJunctionClosed, 1),
-        MazeFlags.PassagesStraight & ~MazeFlags.PassageE => (tJunctionClosed, 2),
-        MazeFlags.PassagesStraight & ~MazeFlags.PassageS => (tJunctionClosed, 3),
+        MazeFlags.PassagesStraight & ~MazeFlags.PassageW => GetTJunction(flags, 0),
+        MazeFlags.PassagesStraight & ~MazeFlags.PassageN => GetTJunction(flags, 1),
+        MazeFlags.PassagesStraight & ~MazeFlags.PassageE => GetTJunction(flags, 2),
+        MazeFlags.PassagesStraight & ~MazeFlags.PassageS => GetTJunction(flags, 3),
 
-        _ => (xJunctionClosed, 0)
+        _ => GetXJunction(flags)
     };
 
     (MazeCellObject, int) GetCorner(MazeFlags flags, int rotation) => (
         flags.HasAny(MazeFlags.PassagesDiagonal) ? cornerOpen : cornerClosed, rotation
     );
+
+    (MazeCellObject, int) GetTJunction(MazeFlags flags, int rotation) => (
+        flags.RotatedDiagonalPassages(rotation) switch
+        {
+            MazeFlags.Empty => tJunctionClosed,
+            MazeFlags.PassageNE => tJunctionOpenNE,
+            MazeFlags.PassageSE => tJunctionOpenSE,
+            _ => tJunctionOpen
+        },
+        rotation
+    );
+
+    (MazeCellObject, int) GetXJunction(MazeFlags flags) =>
+        flags.DiagonalPassages() switch
+        {
+            MazeFlags.Empty => (xJunctionClosed, 0),
+
+            MazeFlags.PassageNE => (xJunctionOpenNE, 0),
+            MazeFlags.PassageSE => (xJunctionOpenNE, 1),
+            MazeFlags.PassageSW => (xJunctionOpenNE, 2),
+            MazeFlags.PassageNW => (xJunctionOpenNE, 3),
+
+            MazeFlags.PassageNE | MazeFlags.PassageSE => (xJunctionOpenNE_SE, 0),
+            MazeFlags.PassageSE | MazeFlags.PassageSW => (xJunctionOpenNE_SE, 1),
+            MazeFlags.PassageSW | MazeFlags.PassageNW => (xJunctionOpenNE_SE, 2),
+            MazeFlags.PassageNW | MazeFlags.PassageNE => (xJunctionOpenNE_SE, 3),
+
+            MazeFlags.PassageNE | MazeFlags.PassageSW => (xJunctionOpenNE_SW, 0),
+            MazeFlags.PassageSE | MazeFlags.PassageNW => (xJunctionOpenNE_SW, 1),
+
+            MazeFlags.PassagesDiagonal & ~MazeFlags.PassageNE => (xJunctionClosedNE, 0),
+            MazeFlags.PassagesDiagonal & ~MazeFlags.PassageSE => (xJunctionClosedNE, 1),
+            MazeFlags.PassagesDiagonal & ~MazeFlags.PassageSW => (xJunctionClosedNE, 2),
+            MazeFlags.PassagesDiagonal & ~MazeFlags.PassageNW => (xJunctionClosedNE, 3),
+
+            _ => (xJunctionOpen, 0),
+        };
 }
