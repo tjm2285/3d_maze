@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -6,6 +5,7 @@ public class MazeCellObject : MonoBehaviour
 {
 #if UNITY_EDITOR
     static List<Stack<MazeCellObject>> pools;
+
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     static void ClearPools()
     {
@@ -22,8 +22,9 @@ public class MazeCellObject : MonoBehaviour
         }
     }
 #endif
+
     [System.NonSerialized]
-    System.Collections.Generic.Stack<MazeCellObject> pool;
+    Stack<MazeCellObject> pool;
 
     public MazeCellObject GetInstance()
     {
