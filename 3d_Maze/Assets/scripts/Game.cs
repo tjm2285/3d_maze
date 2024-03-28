@@ -26,13 +26,23 @@ public class Game : MonoBehaviour
     [SerializeField, Range(0f, 1f)]
     float openArbitraryProbability = 0.5f;
 
+    [SerializeField]
+    Player player;
+
     Maze maze;
 
     private void Awake()
     {
         maze = new Maze(mazeSize);
 
-    new FindDiagonalPassagesJob
+        if (seed != 0)
+        {
+            Random.InitState(seed);
+        }
+
+        player.StartNewGame(new Vector3(1f, 0f, 1f));
+
+        new FindDiagonalPassagesJob
     {
         maze = maze
     }.ScheduleParallel(
@@ -48,7 +58,10 @@ public class Game : MonoBehaviour
 
         visualization.Visualize(maze);
     }
-
+    void Update()
+    {
+        player.Move();
+    }
     void OnDestroy()
     {
         maze.Dispose();

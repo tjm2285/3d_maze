@@ -53,9 +53,10 @@ public struct Maze
         return coordinates;
     }
 
-    public Vector3 CoordinatesToWorldPosition(int2 coordinates, float Y = 0f) => 
+    public Vector3 CoordinatesToWorldPosition(int2 coordinates, float y = 0f) => 
         new Vector3(
         2f * coordinates.x + 1f - size.x,
+        y,
         2f * coordinates.y + 1f - size.y
         );
 
