@@ -399,6 +399,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 1454342626914508696, guid: 51d25f611859cd54c89ffe7ade20114f, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 6d2bf4811ff7b414290b7fd195f55830, type: 2}
     - target: {fileID: 4769339476147100567, guid: 51d25f611859cd54c89ffe7ade20114f, type: 3}
       propertyPath: m_LocalScale.x
       value: 0.75
@@ -535,7 +539,7 @@ MonoBehaviour:
   mazeSize:
     x: 20
     y: 20
-  seed: 123
+  seed: 0
   pickLastProbability: 0.5
   openDeadEndProbability: 0.5
   openArbitraryProbability: 0.25
@@ -544,6 +548,7 @@ MonoBehaviour:
   - {fileID: 1344654722}
   - {fileID: 1376620612}
   - {fileID: 1740447085}
+  displayText: {fileID: 1941865924}
 --- !u!1001 &1740447084
 PrefabInstance:
   m_ObjectHideFlags: 0

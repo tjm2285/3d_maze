@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
@@ -33,13 +34,39 @@ public class Game : MonoBehaviour
     [SerializeField]
     Agent[] agents;
 
+    [SerializeField]
+    TextMeshPro displayText;
+
     Maze maze;
+
     Scent scent;
 
-    private void Awake()
+    bool isPlaying;
+
+    MazeCellObject[] cellObjects;
+    void StartNewGame()
     {
+        isPlaying = true;
+        displayText.gameObject.SetActive(false);
         maze = new Maze(mazeSize);
         scent = new Scent(maze);
+       
+        new FindDiagonalPassagesJob
+        {
+            maze = maze
+        }.ScheduleParallel(
+            maze.Length, maze.SizeEW, new GenerateMazeJob
+            {
+                maze = maze,
+                seed = seed != 0 ? seed : Random.Range(1, int.MaxValue),
+                pickLastProbability = pickLastProbability,
+                openDeadEndProbability = openDeadEndProbability,
+                openArbitraryProbability = openArbitraryProbability
+            }.Schedule()
+        ).Complete();
+
+        visualization.Visualize(maze);
+
         if (seed != 0)
         {
             Random.InitState(seed);
@@ -47,21 +74,6 @@ public class Game : MonoBehaviour
 
         player.StartNewGame(new Vector3(1f, 0f, 1f));
 
-        new FindDiagonalPassagesJob
-    {
-        maze = maze
-    }.ScheduleParallel(
-        maze.Length, maze.SizeEW, new GenerateMazeJob
-        {
-            maze = maze,
-            seed = seed != 0 ? seed : Random.Range(1, int.MaxValue),
-            pickLastProbability = pickLastProbability,
-            openDeadEndProbability = openDeadEndProbability,
-            openArbitraryProbability = openArbitraryProbability
-        }.Schedule()
-    ).Complete();
-
-        visualization.Visualize(maze);
 
         for (int i = 0; i < agents.Length; i++)
         {
@@ -72,11 +84,41 @@ public class Game : MonoBehaviour
     }
     void Update()
     {
+        if (isPlaying)
+        {
+            UpdateGame();
+        }
+        else if (Input.GetKeyDown(KeyCode.Space))
+        {
+            StartNewGame();
+            UpdateGame();
+        }        
+    }
+
+    private void UpdateGame()
+    {
         NativeArray<float> currentScent = scent.Disperse(maze, player.Move());
         for (int i = 0; i < agents.Length; i++)
         {
             agents[i].Move(currentScent);
         }
+    }
+    void EndGame(string message)
+    {
+        isPlaying = false;
+        displayText.text = message;
+        displayText.gameObject.SetActive(true);
+        for (int i = 0; i < agents.Length; i++)
+        {
+            agents[i].EndGame();
+        }
+
+        for (int i = 0; i < cellObjects.Length; i++)
+        {
+            cellObjects[i].Recycle();
+        }
+
+        OnDestroy();
     }
     void OnDestroy()
     {

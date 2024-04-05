@@ -117,4 +117,6 @@ public class Agent : MonoBehaviour
         return transform.localPosition =
             position + targetVector * (movement / targetDistance);
     }
+
+    public void EndGame() => gameObject.SetActive(false);
 }
