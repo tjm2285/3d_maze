@@ -62,6 +62,17 @@ public struct Maze
 
     public Vector3 IndexToWorldPosition(int index, float y = 0f) => CoordinatesToWorldPosition(IndexToCoordinates(index),y);
 
+    public int CoordinatesToIndex(int2 coordinates) =>
+        coordinates.y * size.x + coordinates.x;
+
+    public int2 WorldPositionToCoordinates(Vector3 position) => int2(
+        (int)((position.x + size.x) * 0.5f),
+        (int)((position.z + size.y) * 0.5f)
+    );
+
+    public int WorldPositionToIndex(Vector3 position) =>
+        CoordinatesToIndex(WorldPositionToCoordinates(position));
+
     public void Dispose()
     {
         if (cells.IsCreated)

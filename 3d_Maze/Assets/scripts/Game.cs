@@ -30,11 +30,12 @@ public class Game : MonoBehaviour
     Player player;
 
     Maze maze;
+    Scent scent;
 
     private void Awake()
     {
         maze = new Maze(mazeSize);
-
+        scent = new Scent(maze);
         if (seed != 0)
         {
             Random.InitState(seed);
@@ -60,10 +61,11 @@ public class Game : MonoBehaviour
     }
     void Update()
     {
-        player.Move();
+        scent.Disperse(maze, player.Move());
     }
     void OnDestroy()
     {
         maze.Dispose();
+        scent.Dispose();
     }
 }
