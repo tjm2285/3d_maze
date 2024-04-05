@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.Collections;
 using Unity.Jobs;
 using Unity.Mathematics;
 using UnityEngine;
@@ -28,6 +29,9 @@ public class Game : MonoBehaviour
 
     [SerializeField]
     Player player;
+
+    [SerializeField]
+    Agent[] agents;
 
     Maze maze;
     Scent scent;
@@ -58,10 +62,21 @@ public class Game : MonoBehaviour
     ).Complete();
 
         visualization.Visualize(maze);
+
+        for (int i = 0; i < agents.Length; i++)
+        {
+            var coordinates =
+                int2(Random.Range(0, mazeSize.x), Random.Range(0, mazeSize.y));
+            agents[i].StartNewGame(maze, coordinates);
+        }
     }
     void Update()
     {
-        scent.Disperse(maze, player.Move());
+        NativeArray<float> currentScent = scent.Disperse(maze, player.Move());
+        for (int i = 0; i < agents.Length; i++)
+        {
+            agents[i].Move(currentScent);
+        }
     }
     void OnDestroy()
     {
