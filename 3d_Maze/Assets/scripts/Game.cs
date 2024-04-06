@@ -65,20 +65,37 @@ public class Game : MonoBehaviour
             }.Schedule()
         ).Complete();
 
-        visualization.Visualize(maze);
+        if (cellObjects == null || cellObjects.Length != maze.Length)
+        {
+            cellObjects = new MazeCellObject[maze.Length];
+        }
+        visualization.Visualize(maze, cellObjects);
 
         if (seed != 0)
         {
             Random.InitState(seed);
         }
 
-        player.StartNewGame(new Vector3(1f, 0f, 1f));
+        player.StartNewGame(maze.CoordinatesToWorldPosition(
+            int2(Random.Range(0, mazeSize.x / 4), Random.Range(0, mazeSize.y / 4))
+        ));
 
-
+        int2 halfSize = mazeSize / 2;
         for (int i = 0; i < agents.Length; i++)
         {
             var coordinates =
                 int2(Random.Range(0, mazeSize.x), Random.Range(0, mazeSize.y));
+            if (coordinates.x < halfSize.x && coordinates.y < halfSize.y)
+            {
+                if (Random.value < 0.5f)
+                {
+                    coordinates.x += halfSize.x;
+                }
+                else
+                {
+                    coordinates.y += halfSize.y;
+                }
+            }
             agents[i].StartNewGame(maze, coordinates);
         }
     }
@@ -97,10 +114,21 @@ public class Game : MonoBehaviour
 
     private void UpdateGame()
     {
-        NativeArray<float> currentScent = scent.Disperse(maze, player.Move());
+        Vector3 playerPosition = player.Move();
+        NativeArray<float> currentScent = scent.Disperse(maze, playerPosition);
         for (int i = 0; i < agents.Length; i++)
         {
-            agents[i].Move(currentScent);
+            Vector3 agentPosition = agents[i].Move(currentScent);
+            if (
+                new Vector2(
+                    agentPosition.x - playerPosition.x,
+                    agentPosition.z - playerPosition.z
+                ).sqrMagnitude < 1f
+            )
+            {                
+                EndGame(agents[i].TriggerMessage);
+                return;
+            }
         }
     }
     void EndGame(string message)

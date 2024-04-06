@@ -13,18 +13,26 @@ public class Agent : MonoBehaviour
     [SerializeField, Min(0f)]
     float speed = 1f;
 
+    [SerializeField]
+    bool isGoal;
+
+    [SerializeField]
+    string triggerMessage;
+
     Maze maze;
 
     int targetIndex;
 
     Vector3 targetPosition;
 
+    public string TriggerMessage => triggerMessage;
     private void Awake()
     {
         GetComponent<Light>().color = color;
         GetComponent<MeshRenderer>().material.color = color;
         ParticleSystem.MainModule main = GetComponent<ParticleSystem>().main;
         main.startColor = color;
+        gameObject.SetActive(false);
     }
 
     public void StartNewGame(Maze maze, int2 coordinates)
@@ -33,13 +41,14 @@ public class Agent : MonoBehaviour
         targetIndex = maze.CoordinatesToIndex(coordinates);
         targetPosition = transform.localPosition =
             maze.CoordinatesToWorldPosition(coordinates, transform.localPosition.y);
+        gameObject.SetActive(true);
     }
 
     void Sniff(ref (int, float) trail, NativeArray<float> scent, int indexOffset)
     {
         int sniffIndex = targetIndex + indexOffset;
         float detectedScent = scent[sniffIndex];
-        if (detectedScent > trail.Item2)
+        if (isGoal ? detectedScent < trail.Item2 : detectedScent > trail.Item2)
         {
             trail = (sniffIndex, detectedScent);
         }
@@ -48,7 +57,7 @@ public class Agent : MonoBehaviour
     bool TryFindNewTarget(NativeArray<float> scent)
     {
         MazeFlags cell = maze[targetIndex];
-        (int, float) trail = (0, 0f);
+        (int, float) trail = (0, isGoal ? float.MaxValue : 0f);
 
         if (cell.Has(MazeFlags.PassageNE))
         {
