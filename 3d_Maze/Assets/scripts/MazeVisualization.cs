@@ -15,12 +15,12 @@ public class MazeVisualization : ScriptableObject
     MazeCellObject deadEnd, straight, cornerClosed, cornerOpen, tJunctionClosed, tJunctionOpenNE, tJunctionOpenSE, tJunctionOpen, xJunctionClosed, xJunctionOpenNE, xJunctionOpenNE_SE, xJunctionOpenNE_SW,
         xJunctionClosedNE, xJunctionOpen;
 
-    public void Visualize(Maze maze)
+    public void Visualize(Maze maze, MazeCellObject[] cellObjects)
     {
         for (int i = 0; i < maze.Length; i++)
         {
             (MazeCellObject, int) prefabWithRotation = GetPrefab(maze[i]);
-            MazeCellObject instance = prefabWithRotation.Item1.GetInstance();
+            MazeCellObject instance = cellObjects[i] = prefabWithRotation.Item1.GetInstance();
             instance.transform.SetPositionAndRotation(
                 maze.IndexToWorldPosition(i), rotations[prefabWithRotation.Item2]
             );
